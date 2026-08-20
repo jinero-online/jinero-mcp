@@ -1,0 +1,732 @@
+{
+  "server": "online.jinero/jinero",
+  "endpoint": "https://jinero.online/mcp",
+  "note": "Snapshot of the live tools/list. Regenerate: npm run update-snapshot",
+  "tools": [
+    {
+      "name": "search_fonts",
+      "title": "Search Fonts Tool",
+      "description": "Search the free font catalog by name, category, style tags, language coverage, variable/monospace flags and style count. Returns a paginated list of families.",
+      "inputSchema": {
+        "properties": {
+          "name": {
+            "description": "Fuzzy name match.",
+            "type": "string"
+          },
+          "category": {
+            "description": "Comma-separated categories, e.g. 'serif,sans'.",
+            "type": "string"
+          },
+          "langs": {
+            "description": "Comma-separated language codes, e.g. 'latin,cyrillic' — ALL must be supported.",
+            "type": "string"
+          },
+          "style": {
+            "description": "Comma-separated style tags, e.g. 'handwriting,condensed' — ALL must match. One of: handwriting, script, display, slab, rounded, condensed, expanded, stencil, pixel, blackletter, outline, retro.",
+            "type": "string"
+          },
+          "variable": {
+            "description": "Only variable fonts.",
+            "type": "boolean"
+          },
+          "monospace": {
+            "description": "Only monospace fonts.",
+            "type": "boolean"
+          },
+          "styles_min": {
+            "description": "Minimum number of styles.",
+            "type": "integer"
+          },
+          "styles_max": {
+            "description": "Maximum number of styles.",
+            "type": "integer"
+          },
+          "order": {
+            "description": "Sort field, default 'likes'.",
+            "enum": [
+              "likes",
+              "downloads",
+              "views",
+              "name",
+              "created_at"
+            ],
+            "type": "string"
+          },
+          "sort": {
+            "description": "Sort direction.",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "type": "string"
+          },
+          "per_page": {
+            "description": "Results per page (default 24).",
+            "minimum": 1,
+            "maximum": 100,
+            "type": "integer"
+          },
+          "page": {
+            "description": "Page number.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "recognize_font",
+      "title": "Recognize Font Tool",
+      "description": "Identify which font is used in an image. Powered by our OWN CNN embedding model, trained on the jinero font catalog — it matches fonts by visual shape/style, so it needs NO OCR and NO text (works for Latin and Cyrillic). Send a tight crop of one line of text as either image_url (public URL) or image_base64 (base64/data-URI, e.g. a local screenshot). The image is processed in memory and deleted immediately — never stored. Returns the most visually similar font families with scores. Fast (~200 ms).",
+      "inputSchema": {
+        "properties": {
+          "image_url": {
+            "description": "Public URL of an image — a tight crop of one line of text. Provide either this or image_base64. Recognition is by visual shape (no OCR/text needed); Latin & Cyrillic supported.",
+            "type": "string"
+          },
+          "image_base64": {
+            "description": "Base64-encoded image (raw base64 or a data:image/...;base64 URI), max 8 MB decoded — use this to send a local file/screenshot without hosting it. Provide either this or image_url.",
+            "type": "string"
+          },
+          "top_k": {
+            "description": "Number of font matches to return (3–20, default 8).",
+            "minimum": 3,
+            "maximum": 20,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_font",
+      "title": "Get Font Tool",
+      "description": "Get full metadata for one font family by slug: styles, weights, axes, license, subsets and download/CSS URLs.",
+      "inputSchema": {
+        "properties": {
+          "slug": {
+            "description": "Family slug, e.g. 'inter', 'playfair-display'.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "slug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_font_files",
+      "title": "Get Font Files Tool",
+      "description": "List every font file (weight/italic/format + direct woff2/ttf URL) for a family — handy for building custom @font-face rules.",
+      "inputSchema": {
+        "properties": {
+          "slug": {
+            "description": "Family slug, e.g. 'inter'.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "slug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_fonts_css",
+      "title": "Get Fonts Css Tool",
+      "description": "Generate ready-to-use @font-face CSS for a family spec (Google-Fonts-compatible), e.g. \"inter:wght@400,700\" or a variable range \"inter:wght@300..900\". Returns CSS text.",
+      "inputSchema": {
+        "properties": {
+          "family": {
+            "description": "Family spec, e.g. \"inter:wght@400,700\" or \"inter:wght@300..900\".",
+            "type": "string"
+          },
+          "display": {
+            "description": "font-display value (default swap).",
+            "enum": [
+              "swap",
+              "auto",
+              "block",
+              "fallback",
+              "optional"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "family"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_font_download_url",
+      "title": "Get Font Download Url Tool",
+      "description": "Return the direct ZIP download URL for a font family (all styles + a ready fonts.css). Does NOT download — hand the URL to the user or fetch it separately.",
+      "inputSchema": {
+        "properties": {
+          "slug": {
+            "description": "Family slug, e.g. 'inter'.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "slug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "check_contrast",
+      "title": "Check Contrast Tool",
+      "description": "Check the WCAG contrast ratio between a foreground and background color, with AA/AAA pass/fail for normal and large text.",
+      "inputSchema": {
+        "properties": {
+          "fg": {
+            "description": "Foreground color (hex, rgb(), or hsl()).",
+            "type": "string"
+          },
+          "bg": {
+            "description": "Background color (hex, rgb(), or hsl()).",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fg",
+          "bg"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_color_shades",
+      "title": "Get Color Shades Tool",
+      "description": "Generate tints and shades for a base color (lighter/darker steps) with hex values.",
+      "inputSchema": {
+        "properties": {
+          "hex": {
+            "description": "Base color in hex, rgb(), or hsl().",
+            "type": "string"
+          },
+          "step": {
+            "description": "Step percentage (default 10).",
+            "enum": [
+              "5",
+              "10",
+              "20",
+              "25"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "description": "Cap on tints/shades (default fills to ~100%).",
+            "minimum": 1,
+            "maximum": 20,
+            "type": "integer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hex"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "name_color",
+      "title": "Name Color Tool",
+      "description": "Get the closest human-readable name for one or more colors. Pass a single hex or several comma-separated (e.g. \"#3b82f6,#000,#ff7f50\"); returns each input with its nearest color name, the reference hex, an exact-match flag and the perceptual distance.",
+      "inputSchema": {
+        "properties": {
+          "hex": {
+            "description": "A hex color, or several comma-separated (e.g. \"#3b82f6,#000,#ff7f50\"). Up to 100 at once.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hex"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "extract_colors",
+      "title": "Extract Colors Tool",
+      "description": "Extract a dominant-color palette from an image. Send either a public image_url or image_base64 (base64/data-URI, e.g. a local screenshot). The image is processed in memory and never stored. Each color comes back with its hex, rgb, hsl, share of the image, and the closest human color name — a named palette in one call.",
+      "inputSchema": {
+        "properties": {
+          "image_url": {
+            "description": "Public URL of the image to pull the palette from. Provide either this or image_base64.",
+            "type": "string"
+          },
+          "image_base64": {
+            "description": "Base64-encoded image (raw base64 or a data:image/...;base64 URI), max 10 MB decoded — use this to send a local file/screenshot without hosting it. Provide either this or image_url.",
+            "type": "string"
+          },
+          "count": {
+            "description": "How many colors to return (2–16, default 8).",
+            "type": "integer"
+          },
+          "mode": {
+            "description": "Palette mode: \"balanced\" (default), \"vibrant\", or \"muted\".",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "search_palettes",
+      "title": "Search Palettes Tool",
+      "description": "Search the color-palette catalog by name, tone, temperature, mood, harmony, exact color count and tags. Returns a paginated list.",
+      "inputSchema": {
+        "properties": {
+          "name": {
+            "description": "Fuzzy name match.",
+            "type": "string"
+          },
+          "tone": {
+            "description": "Overall tone.",
+            "enum": [
+              "light",
+              "dark",
+              "mixed"
+            ],
+            "type": "string"
+          },
+          "temperature": {
+            "description": "Color temperature.",
+            "enum": [
+              "warm",
+              "cool",
+              "neutral"
+            ],
+            "type": "string"
+          },
+          "mood": {
+            "description": "e.g. pastel, muted, earthy, vibrant, monochrome.",
+            "type": "string"
+          },
+          "harmony": {
+            "description": "e.g. analogous, complementary, triadic, monochromatic, split-complementary, tetradic.",
+            "type": "string"
+          },
+          "color_count": {
+            "description": "Exact number of colors.",
+            "minimum": 2,
+            "maximum": 10,
+            "type": "integer"
+          },
+          "tags": {
+            "description": "Tag slugs — ALL must match (AND).",
+            "type": "array"
+          },
+          "order": {
+            "description": "Sort order (default newest).",
+            "enum": [
+              "newest",
+              "popular",
+              "name"
+            ],
+            "type": "string"
+          },
+          "per_page": {
+            "description": "Results per page (default 24).",
+            "minimum": 1,
+            "maximum": 100,
+            "type": "integer"
+          },
+          "page": {
+            "description": "Page number.",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_palette",
+      "title": "Get Palette Tool",
+      "description": "Get one color palette by id: its colors (hex), name/derived title, mood, harmony, temperature and tags.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "description": "Palette id.",
+            "type": "integer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "minify_code",
+      "title": "Minify Code Tool",
+      "description": "Minify or beautify JS, CSS, HTML, SVG, JSON or XML text. Set type=auto to sniff the language. The code is only parsed and re-printed — never executed and never stored.",
+      "inputSchema": {
+        "properties": {
+          "code": {
+            "description": "Source code to transform.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Source language, or 'auto' to sniff.",
+            "enum": [
+              "js",
+              "css",
+              "html",
+              "svg",
+              "json",
+              "xml",
+              "auto"
+            ],
+            "type": "string"
+          },
+          "mode": {
+            "description": "Default minify.",
+            "enum": [
+              "minify",
+              "beautify"
+            ],
+            "type": "string"
+          },
+          "keep_license": {
+            "description": "Preserve /*! ... */ license comments when minifying.",
+            "type": "boolean"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "type"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "detect_code",
+      "title": "Detect Code Tool",
+      "description": "Detect the language/format of a code snippet. Static analysis only — the snippet is never executed and never stored.",
+      "inputSchema": {
+        "properties": {
+          "code": {
+            "description": "Snippet to inspect. Max 200,000 chars.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "convert_code",
+      "title": "Convert Code Tool",
+      "description": "Convert code between text formats (e.g. JSON↔YAML, CSS↔SCSS). Pure text transformation: the source is parsed and re-serialized, never executed and never stored. Use list_code_converters for valid from/to ids and per-converter options.",
+      "inputSchema": {
+        "properties": {
+          "code": {
+            "description": "Source code to convert.",
+            "type": "string"
+          },
+          "from": {
+            "description": "Source format id (see list_code_converters).",
+            "type": "string"
+          },
+          "to": {
+            "description": "Target format id.",
+            "type": "string"
+          },
+          "options": {
+            "description": "Per-converter options (see optionsSchema in list_code_converters).",
+            "type": "object"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "from",
+          "to"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_code_converters",
+      "title": "List Code Converters Tool",
+      "description": "List available code converters with their from/to ids and per-converter option schemas.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "optimize_svg",
+      "title": "Optimize Svg Tool",
+      "description": "Optimize/clean SVG markup (SVGO). Pure markup transformation — nothing is executed or stored. Returns minified SVG plus before/after sizes.",
+      "inputSchema": {
+        "properties": {
+          "svg": {
+            "description": "SVG source. Max 500,000 chars.",
+            "type": "string"
+          },
+          "preset": {
+            "description": "Optimization preset (default balanced).",
+            "enum": [
+              "safe",
+              "balanced",
+              "aggressive"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "svg"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "svg_to_datauri",
+      "title": "Svg To Data Uri Tool",
+      "description": "Encode an SVG (or fetched image) as a CSS-ready data: URI. Provide either raw svg or a url.",
+      "inputSchema": {
+        "properties": {
+          "svg": {
+            "description": "Raw SVG markup. Mutually exclusive with url.",
+            "type": "string"
+          },
+          "url": {
+            "description": "Public image URL the server will fetch.",
+            "type": "string"
+          },
+          "encoding": {
+            "description": "Defaults: utf8 for SVG, base64 for raster.",
+            "enum": [
+              "utf8",
+              "base64"
+            ],
+            "type": "string"
+          },
+          "quotes": {
+            "description": "Quote style for the data URI (default double).",
+            "enum": [
+              "single",
+              "double"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_svg_presets",
+      "title": "List Svg Presets Tool",
+      "description": "List the available SVG optimization presets and what each one does.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_scss_mixins",
+      "title": "List Scss Mixins Tool",
+      "description": "List the SCSS mixin catalog (id, title, short description), optionally filtered by group or search.",
+      "inputSchema": {
+        "properties": {
+          "group": {
+            "description": "e.g. Bootstrap, Project, Pattern, Placeholder.",
+            "type": "string"
+          },
+          "search": {
+            "description": "Fuzzy substring across id/title/short/desc.",
+            "type": "string"
+          },
+          "fields": {
+            "description": "Detail level (default summary).",
+            "enum": [
+              "summary",
+              "full"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_scss_mixin",
+      "title": "Get Scss Mixin Tool",
+      "description": "Get one SCSS mixin by id: full source, parameters and usage example.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "description": "Mixin id (kebab-case), e.g. 'centerer', 'media-breakpoint-up'.",
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "generate_clamp",
+      "title": "Generate Clamp Tool",
+      "description": "Calculate a fluid CSS clamp() expression for responsive sizing between two viewport widths. Pure calculation — returns a CSS snippet, writes and stores nothing.",
+      "inputSchema": {
+        "properties": {
+          "min_fs": {
+            "description": "Minimum size in px.",
+            "type": "number"
+          },
+          "max_fs": {
+            "description": "Maximum size in px.",
+            "type": "number"
+          },
+          "min_vw": {
+            "description": "Viewport width at min_fs (default 320).",
+            "type": "number"
+          },
+          "max_vw": {
+            "description": "Viewport width at max_fs (default 1440).",
+            "type": "number"
+          },
+          "unit": {
+            "description": "Output unit (default rem).",
+            "enum": [
+              "px",
+              "rem",
+              "both"
+            ],
+            "type": "string"
+          },
+          "root": {
+            "description": "Root font-size in px for rem conversion (default 16).",
+            "type": "number"
+          }
+        },
+        "type": "object",
+        "required": [
+          "min_fs",
+          "max_fs"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
+}

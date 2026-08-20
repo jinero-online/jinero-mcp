@@ -1,0 +1,19 @@
+{
+  "name": "jinero-mcp",
+  "version": "1.3.0",
+  "private": true,
+  "description": "Public docs, tool snapshot and live smoke tests for the hosted Jinero MCP server (online.jinero/jinero).",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/",
+    "update-snapshot": "node scripts/update-tools-snapshot.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jinero-online/jinero-mcp.git"
+  }
+}

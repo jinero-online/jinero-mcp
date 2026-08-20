@@ -37,6 +37,18 @@ Every tool declares MCP annotations, verifiable in `tools/list`:
 - uploaded images (font recognition, color extraction) are processed in memory and deleted immediately;
 - only three tools fetch a user-supplied URL (`recognize_font`, `extract_colors`, `svg_to_datauri`) — marked `openWorldHint: true`, with SSRF-guarded, size-capped fetches.
 
+> **A note for automated risk scanners:** some directories classify `minify_code`, `convert_code`, `generate_clamp` or `recognize_font` as "write" tools based on their verbs. They are pure functions — text/math in, text out; nothing on the server or the caller's side is modified. The authoritative signal is the `readOnlyHint: true` annotation each of the 22 tools declares in `tools/list` (snapshotted in [`tools.json`](tools.json)).
+
+## Tests & CI
+
+[`tests/tools.test.mjs`](tests/tools.test.mjs) exercises **every declared tool** against the live endpoint (zero dependencies, Node 20+):
+
+```bash
+npm test
+```
+
+CI runs the suite on every push and weekly ([workflow](.github/workflows/test.yml)), and [`tools.json`](tools.json) is a committed snapshot of the live `tools/list` — schemas and annotations included (`npm run update-snapshot` to refresh).
+
 ## Try it without a client
 
 ```bash
