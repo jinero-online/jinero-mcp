@@ -83,7 +83,7 @@
     {
       "name": "recognize_font",
       "title": "Recognize Font Tool",
-      "description": "Identify which font is used in an image. Powered by our OWN CNN embedding model, trained on the jinero font catalog — it matches fonts by visual shape/style, so it needs NO OCR and NO text (works for Latin and Cyrillic). Send a tight crop of one line of text as either image_url (public URL) or image_base64 (base64/data-URI, e.g. a local screenshot). The image is processed in memory and deleted immediately — never stored. Returns the most visually similar font families with scores. Fast (~200 ms). Rate limit: 5 calls/min per IP (model inference is compute-heavy).",
+      "description": "Identify which font is used in an image. Powered by our OWN CNN embedding model, trained on the jinero font catalog — it matches fonts by visual shape/style, so it needs NO OCR and NO text (works for Latin and Cyrillic). Send a tight crop of one line of text as either image_url (public URL) or image_base64 (base64/data-URI, e.g. a local screenshot). The image is processed in memory and deleted immediately — never stored. Returns the most visually similar font families with scores. Typically 0.3-1.7 s (an OCR-assisted rerank of top candidates engages when retrieval is uncertain). Rate limit: 5 calls/min per IP (model inference is compute-heavy).",
       "inputSchema": {
         "properties": {
           "image_url": {
