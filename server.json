@@ -3,8 +3,12 @@
     "name": "online.jinero/jinero",
     "title": "Jinero",
     "description": "AI-agent design tools: fonts, font recognition, palettes, color naming, contrast, code, SVG, CSS.",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "websiteUrl": "https://jinero.online/dev/mcp?ref=mcp",
+    "repository": {
+        "url": "https://github.com/jinero-online/jinero-mcp",
+        "source": "github"
+    },
     "remotes": [
         {
             "type": "streamable-http",

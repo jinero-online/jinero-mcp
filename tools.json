@@ -83,7 +83,7 @@
     {
       "name": "recognize_font",
       "title": "Recognize Font Tool",
-      "description": "Identify which font is used in an image. Powered by our OWN CNN embedding model, trained on the jinero font catalog — it matches fonts by visual shape/style, so it needs NO OCR and NO text (works for Latin and Cyrillic). Send a tight crop of one line of text as either image_url (public URL) or image_base64 (base64/data-URI, e.g. a local screenshot). The image is processed in memory and deleted immediately — never stored. Returns the most visually similar font families with scores. Fast (~200 ms).",
+      "description": "Identify which font is used in an image. Powered by our OWN CNN embedding model, trained on the jinero font catalog — it matches fonts by visual shape/style, so it needs NO OCR and NO text (works for Latin and Cyrillic). Send a tight crop of one line of text as either image_url (public URL) or image_base64 (base64/data-URI, e.g. a local screenshot). The image is processed in memory and deleted immediately — never stored. Returns the most visually similar font families with scores. Fast (~200 ms). Rate limit: 5 calls/min per IP (model inference is compute-heavy).",
       "inputSchema": {
         "properties": {
           "image_url": {
@@ -298,7 +298,7 @@
     {
       "name": "extract_colors",
       "title": "Extract Colors Tool",
-      "description": "Extract a dominant-color palette from an image. Send either a public image_url or image_base64 (base64/data-URI, e.g. a local screenshot). The image is processed in memory and never stored. Each color comes back with its hex, rgb, hsl, share of the image, and the closest human color name — a named palette in one call.",
+      "description": "Extract a dominant-color palette from an image. Send either a public image_url or image_base64 (base64/data-URI, e.g. a local screenshot). The image is processed in memory and never stored. Each color comes back with its hex, rgb, hsl, share of the image, and the closest human color name — a named palette in one call. Rate limit: 10 calls/min per IP.",
       "inputSchema": {
         "properties": {
           "image_url": {
@@ -426,7 +426,7 @@
     {
       "name": "minify_code",
       "title": "Minify Code Tool",
-      "description": "Minify or beautify JS, CSS, HTML, SVG, JSON or XML text. Set type=auto to sniff the language. The code is only parsed and re-printed — never executed and never stored.",
+      "description": "Minify or beautify JS, CSS, HTML, SVG, JSON or XML text. Set type=auto to sniff the language. The code is only parsed and re-printed — never executed and never stored. Rate limit: 30 calls/min per IP.",
       "inputSchema": {
         "properties": {
           "code": {
@@ -496,7 +496,7 @@
     {
       "name": "convert_code",
       "title": "Convert Code Tool",
-      "description": "Convert code between text formats (e.g. JSON↔YAML, CSS↔SCSS). Pure text transformation: the source is parsed and re-serialized, never executed and never stored. Use list_code_converters for valid from/to ids and per-converter options.",
+      "description": "Convert code between text formats (e.g. JSON↔YAML, CSS↔SCSS). Pure text transformation: the source is parsed and re-serialized, never executed and never stored. Use list_code_converters for valid from/to ids and per-converter options. Rate limit: 30 calls/min per IP.",
       "inputSchema": {
         "properties": {
           "code": {
@@ -546,7 +546,7 @@
     {
       "name": "optimize_svg",
       "title": "Optimize Svg Tool",
-      "description": "Optimize/clean SVG markup (SVGO). Pure markup transformation — nothing is executed or stored. Returns minified SVG plus before/after sizes.",
+      "description": "Optimize/clean SVG markup (SVGO). Pure markup transformation — nothing is executed or stored. Returns minified SVG plus before/after sizes. Rate limit: 30 calls/min per IP.",
       "inputSchema": {
         "properties": {
           "svg": {
@@ -577,7 +577,7 @@
     {
       "name": "svg_to_datauri",
       "title": "Svg To Data Uri Tool",
-      "description": "Encode an SVG (or fetched image) as a CSS-ready data: URI. Provide either raw svg or a url.",
+      "description": "Encode an SVG (or fetched image) as a CSS-ready data: URI. Provide either raw svg or a url. Rate limit: 30 calls/min per IP.",
       "inputSchema": {
         "properties": {
           "svg": {

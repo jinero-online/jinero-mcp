@@ -3,7 +3,7 @@
 **`online.jinero/jinero`** — a hosted, remote [Model Context Protocol](https://modelcontextprotocol.io) server that gives AI agents (Claude, Cursor, Cline, Zed, Gemini CLI…) the design tools of [jinero.online](https://jinero.online/dev/mcp?ref=github): **22 read-only tools** for fonts (search, CSS, files, recognition from an image), color math (WCAG contrast, shades, naming, palette extraction), curated palettes, code minify/convert/detect, SVG optimization and SCSS helpers.
 
 - **Endpoint:** `https://jinero.online/mcp` (Streamable HTTP)
-- **Auth:** none — anonymous & free, rate-limited at 60 req/min per IP
+- **Auth:** none — anonymous & free, rate-limited at 60 req/min per IP (plus per-tool caps on heavy tools, see below)
 - **Registry:** [`online.jinero/jinero`](https://registry.modelcontextprotocol.io/v0/servers?search=jinero) in the official MCP registry
 - **Manifest:** [`/.well-known/mcp/server.json`](https://jinero.online/.well-known/mcp/server.json)
 - **Human docs:** [jinero.online/dev/mcp](https://jinero.online/dev/mcp) — full reference with example responses
@@ -38,6 +38,17 @@ Every tool declares MCP annotations, verifiable in `tools/list`:
 - only three tools fetch a user-supplied URL (`recognize_font`, `extract_colors`, `svg_to_datauri`) — marked `openWorldHint: true`, with SSRF-guarded, size-capped fetches.
 
 > **A note for automated risk scanners:** some directories classify `minify_code`, `convert_code`, `generate_clamp` or `recognize_font` as "write" tools based on their verbs. They are pure functions — text/math in, text out; nothing on the server or the caller's side is modified. The authoritative signal is the `readOnlyHint: true` annotation each of the 22 tools declares in `tools/list` (snapshotted in [`tools.json`](tools.json)).
+
+## Rate limits
+
+The whole endpoint is capped at **60 requests/min per IP**. On top of that, compute-heavy tools enforce their own per-tool per-IP caps (server v1.4.0+), returned as a clean tool error with a retry hint when exceeded — each cap is also stated in the tool's description:
+
+| Tool | Cap | Why |
+|---|---|---|
+| `recognize_font` | 5/min | CNN model inference |
+| `extract_colors` | 10/min | image analysis subprocess |
+| `minify_code`, `convert_code`, `optimize_svg` | 30/min | parser subprocesses |
+| `svg_to_datauri` | 30/min | may fetch external URLs |
 
 ## Tests & CI
 
