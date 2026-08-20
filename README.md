@@ -1,5 +1,7 @@
 # Jinero MCP Server
 
+[![jinero-mcp MCP server](https://glama.ai/mcp/servers/jinero-online/jinero-mcp/badges/card.svg)](https://glama.ai/mcp/servers/jinero-online/jinero-mcp)
+
 **`online.jinero/jinero`** — a hosted, remote [Model Context Protocol](https://modelcontextprotocol.io) server that gives AI agents (Claude, Cursor, Cline, Zed, Gemini CLI…) the design tools of [jinero.online](https://jinero.online/dev/mcp?ref=github): **22 read-only tools** for fonts (search, CSS, files, recognition from an image), color math (WCAG contrast, shades, naming, palette extraction), curated palettes, code minify/convert/detect, SVG optimization and SCSS helpers.
 
 - **Endpoint:** `https://jinero.online/mcp` (Streamable HTTP)
