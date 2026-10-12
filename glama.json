@@ -1,4 +1,6 @@
 {
-    "$schema": "https://glama.ai/mcp/schemas/glama.json",
-    "maintainers": ["wwwoops6-dotcom"]
+    "$schema": "https://glama.ai/mcp/schemas/server.json",
+    "maintainers": [
+        "wwwoops6-dotcom"
+    ]
 }
